@@ -87,12 +87,14 @@ predictors <- c("NEW_treatment_type2", "diff_species_class", "History_reclass",
                 "main_culture2", "MEAN_depth", "time_since_conversion",
                 "Grouped_Design")
 
+FULL_sun2_clean
 # SEQ dataset
-importance_seq <- compute_xgb_importance(FULL_sun2, "seq_rate", predictors, n_repeats, threshold) %>%
+importance_seq <- compute_xgb_importance(FULL_sun2_clean, "seq_rate", predictors, n_repeats, threshold) %>%
   mutate(varset = "SEQ")
 
 # RR dataset
-importance_rr <- compute_xgb_importance(FULL_sunRR_clean, "yi", predictors, n_repeats, threshold) %>%
+FULL_sunRR_cleanDD<- FULL_sunRR_clean %>% filter(!id_expérimentation %in% c(934,939))
+importance_rr <- compute_xgb_importance(FULL_sunRR_cleanDD, "yi", predictors, n_repeats, threshold) %>%
   mutate(varset = "RR")
 
 #-----------------------------------
@@ -170,7 +172,7 @@ barplot_final <- ggplot(overall_summary, aes(
   coord_flip() +
   theme_minimal(base_size = 14) +
   theme(
-    axis.title = element_blank(),
+  #  axis.title = element_blank(),
     axis.text = element_text(size = 12),
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank(),
@@ -179,6 +181,8 @@ barplot_final <- ggplot(overall_summary, aes(
   labs(
     fill = "Importance Class",
     color = "Dataset",
+    y= "Relative mean importance",
+    x="",
     title = "",
     subtitle = "",
     caption = ""

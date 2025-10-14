@@ -17,27 +17,34 @@ compute_counts <- function(df, prefix) {
   # 1. History_reclass
   hist <- df %>%
     group_by(History_reclass) %>%
-    summarise(n = n(), .groups = "drop") %>%
+    summarise(n = n(),
+              n_studies = n_distinct(id_article),
+              .groups = "drop") %>%
     mutate(category = "History_reclass", level = History_reclass) %>%
-    dplyr::select(category, level, n)
+    dplyr::select(category, level, n, n_studies)
   
   # 2. NEW_treatment_type2
   treat <- df %>%
     group_by(NEW_treatment_type2) %>%
-    summarise(n = n(), .groups = "drop") %>%
+    summarise(n = n(),
+              n_studies = n_distinct(id_article),
+              .groups = "drop") %>%
     mutate(category = "NEW_treatment_type2", level = NEW_treatment_type2) %>%
-    dplyr::select(category, level, n)
+    dplyr::select(category, level, n,n_studies)
   
   # 3. diff_species_class
   species <- df %>%
     group_by(diff_species_class) %>%
-    summarise(n = n(), .groups = "drop") %>%
+    summarise(n = n(),
+              n_studies = n_distinct(id_article),
+              .groups = "drop") %>%
     mutate(category = "diff_species_class", level = diff_species_class) %>%
-    dplyr::select(category, level, n)
+    dplyr::select(category, level, n,n_studies)
   
   # Stack all rows
   counts <- bind_rows(hist, treat, species)
   names(counts)[3] <- paste0("n_", prefix)
+  names(counts)[4] <- paste0("n_studies_", prefix)
   return(counts)
 }
 
@@ -156,7 +163,7 @@ forest_RR <- ggplot(results_table %>% filter(var=="rr")) +
 
 # ---- Combine side by side with equal widths ----
 combined_plot <- forest_seq | forest_RR + 
-  plot_layout(widths = c(69999,1)) &
+  plot_layout(widths = c(69999,1)) +
   theme(plot.margin = margin(5,5,5,5))
 
 combined_plot
@@ -170,6 +177,31 @@ library(dplyr)
 library(ggplot2)
 
 dodge_width <- 0.6
+
+# Échelle visuelle pour RR
+rr_min <- 0.10
+rr_max <- 0.30
+
+rr_vals <- results_table %>% filter(var == "rr") %>% pull(pred)
+rr_lci  <- results_table %>% filter(var == "rr") %>% pull(lci)
+rr_uci  <- results_table %>% filter(var == "rr") %>% pull(uci)
+
+results_table <- results_table %>%
+  mutate(
+    pred_plot = case_when(
+      var == "rr"  ~ rr_min + (pred - min(rr_vals)) / (max(rr_vals) - min(rr_vals)) * (rr_max - rr_min),
+      TRUE ~ pred
+    ),
+    lci_plot = case_when(
+      var == "rr"  ~ rr_min + (lci - min(rr_vals)) / (max(rr_vals) - min(rr_vals)) * (rr_max - rr_min),
+      TRUE ~ lci
+    ),
+    uci_plot = case_when(
+      var == "rr"  ~ rr_min + (uci - min(rr_vals)) / (max(rr_vals) - min(rr_vals)) * (rr_max - rr_min),
+      TRUE ~ uci
+    )
+  )
+
 
 ggplot(results_table, aes(y = level_f, x = pred_plot, color = var, group = var)) +
   geom_point(size = 4, position = position_dodge(width = dodge_width)) +
@@ -195,3 +227,38 @@ ggplot(results_table, aes(y = level_f, x = pred_plot, color = var, group = var))
     strip.text = element_text(face = "bold", size = 14),
     plot.title = element_text(face = "bold", hjust = 0.5)
   )
+
+
+library(ggh4x)
+
+ggplot(results_table, aes(y = level_f, x = pred_plot, color = var, group = var)) +
+  geom_point(size = 4, position = position_dodge(width = dodge_width)) +
+  geom_errorbarh(aes(xmin = lci_plot, xmax = uci_plot),
+                 height = 0.2,
+                 position = position_dodge(width = dodge_width)) +
+  scale_color_manual(values = c("steelblue", "darkorange")) +
+  
+  # Axes
+  scale_x_continuous(
+    name = "SEQ",
+    sec.axis = sec_axis(~ ., name = "RR (log scale)")
+  ) +
+  
+  # Grid à une colonne -> identique à wrap, mais avec espace proportionnel
+  ggh4x::facet_grid2(
+    rows = vars(facet_group),
+    scales = "free_y",
+    space = "free_y"
+  ) +
+  
+  labs(y = "", title = "Partial Dependence") +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    strip.text = element_text(face = "bold", size = 14),
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+
+

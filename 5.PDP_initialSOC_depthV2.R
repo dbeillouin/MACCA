@@ -14,6 +14,8 @@ library(dplyr)
 library(tidyr)
 library(mgcv)
 library(gratia)
+library(emmeans)
+library(gridExtra)
 
 # -----------------------------
 # 1. Filter dataset if needed
@@ -139,7 +141,7 @@ depth_colors <- c(
 # -----------------------------
 # 7. PDP plot per depth
 # -----------------------------
-ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = yhat, 
+plot<-ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = yhat, 
                               color = depth_group, fill = depth_group)) +
   
   # Horizontal reference line at y = 0
@@ -171,7 +173,7 @@ ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = yhat,
   # Labels
   labs(
     x = "Initial SOC stock (t/ha)",
-    y = "Partial dependence",
+    y = "SOC storage rate",
     color = "Soil depth group",
     fill = "Soil depth group"
   ) +
@@ -198,20 +200,27 @@ ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = yhat,
     sides = "b",
     length = unit(0.02, "npc"),
     alpha = 0.5
-  )
+  )+
+  ylim(-2.1,2.5)
 
+p
 # -----------------------------
 # 8. Compute pseudo-R² by depth group
 # -----------------------------
-calc_r2_group <- function(group_name, data_full, model, X_full) {
+calc_metrics_group <- function(group_name, data_full, model, X_full) {
   idx <- data_full$depth_group == group_name
-  y_obs <- data_full$seq_rate[idx]
+  y_obs  <- data_full$seq_rate[idx]
   y_pred <- predict(model, newdata = X_full[idx, ])
-  cor(y_obs, y_pred)^2
+  
+  r2   <- cor(y_obs, y_pred)^2
+  rmse <- sqrt(mean((y_obs - y_pred)^2, na.rm = TRUE))
+  
+  c(R2 = r2, RMSE = rmse)
 }
 
 groups <- unique(FULL_sun2_sub$depth_group)
-r2_table <- sapply(groups, calc_r2_group, data_full = FULL_sun2_sub, model = xgb_model, X_full = X_full)
+metrics_table <- sapply(groups, calc_metrics_group, data_full = FULL_sun2_sub, model = xgb_model, X_full = X_full)
+metrics_table <- t(metrics_table)  # transpose pour avoir R2 et RMSE en colonnes
 
 # -----------------------------
 # 9. Add GAM-smoothed predictions to dataset
@@ -315,6 +324,7 @@ metrics_by_depth <- FULL_sun2_sub %>%
   group_by(depth_group) %>%
   summarise(
     n_points = n(),
+    n_studies   = n_distinct(id_article),
     pseudo_R2 = cor(seq_rate, y_gam)^2,
     RMSE = sqrt(mean((seq_rate - y_gam)^2, na.rm = TRUE)),
     MAE  = mean(abs(seq_rate - y_gam), na.rm = TRUE),
@@ -322,7 +332,43 @@ metrics_by_depth <- FULL_sun2_sub %>%
     .groups = "drop"
   )
 
-metrics_by_depth$RGBOOST <- r2_table
+metrics_table<-data.frame(metrics_table)
+metrics_by_depth$XGBOOST_R2 <- metrics_table$R2  # Add XGBoost R² for comparison
+metrics_by_depth$XGBOOST_RMSE <- metrics_table$RMSE  # Add XGBoost R² for comparison
+
+# Prepare the compact table
+compact_table <- metrics_by_depth %>%
+  transmute(
+    Depth  = depth_group,
+    Obs = paste0(n_points, " (", n_studies, ")"),
+    `XGB \n R2`  = XGBOOST_R2,
+    `XGB \n RMSE` = XGBOOST_RMSE,
+    `GAM \n RMSE` = RMSE
+  )
+
+# Create the table grob with white background and readable text
+tab_grob <- tableGrob(
+  compact_table %>% mutate(across(where(is.numeric), round, 2)),
+  rows = NULL,
+  theme = ttheme_default(
+    core = list(fg_params = list(cex = 0.8, fontface = "plain"),
+                bg_params = list(fill = "white", col = NA)),
+    colhead = list(fg_params = list(cex = 0.8, fontface = "bold"),
+                   bg_params = list(fill = "white", col = NA))
+  )
+)
+
+# Overlay the table on an existing ggplot
+p_inset <- plot +
+  annotation_custom(
+    grob = tab_grob,
+    xmin = 100, xmax = 110,    # X-axis position
+    ymin = 1, ymax = 3   # Y-axis position
+  )
+
+# Display the plot with the inset table
+p_inset
+
 
 # 4. GAM with depth interaction
 gam_depth <- gam(yhat ~ s(control_soc_mean_T_ha, by = depth_group, bs = "cs", k = 6) +
@@ -607,7 +653,7 @@ depth_colors <- c(
 # -----------------------------
 # 7. PDP plot per depth
 # -----------------------------
-ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = exp(yhat), 
+plot<-ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = exp(yhat), 
                               color = depth_group, fill = depth_group)) +
   
   # Horizontal reference line at y = 1 (log(0) -> exp(0) = 1)
@@ -628,7 +674,8 @@ ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = exp(yhat),
     aes(x = control_soc_mean_T_ha, y = exp(yi), color = depth_group),
     inherit.aes = FALSE,
     alpha = 0.3,
-    size = 1
+    size = scales::rescale(1 / FULL_sun2_sub$vi, to = c(1, 5))
+    
   ) +
   
   # Color and fill scales
@@ -638,7 +685,7 @@ ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = exp(yhat),
   # Labels
   labs(
     x = "Initial SOC stock (t/ha)",
-    y = "RR (back-transformed)",
+    y = "SOC Ratio",
     color = "Soil depth group",
     fill = "Soil depth group"
   ) +
@@ -668,13 +715,26 @@ ggplot(pdp_initial_stock, aes(x = control_soc_mean_T_ha, y = exp(yhat),
   )+
   ylim(0.5,2.5)
 
+plot
 # -----------------------------
 # 6. Compute pseudo-R² by depth group for RR
 # -----------------------------
-r2_table_RR <- sapply(groups, function(g) {
+metrics_table_RR <- sapply(groups, function(g) {
   idx <- FULL_sun2_sub$depth_group == g
-  cor(FULL_sun2_sub$yi[idx], predict(xgb_model, newdata = X_full[idx, ]))^2
+  y_obs  <- as.numeric(FULL_sun2_sub$yi[idx])
+  y_pred <- as.numeric(predict(xgb_model, newdata = X_full[idx, ]))
+  
+  valid <- !is.na(y_obs) & !is.na(y_pred)
+  
+  r2   <- cor(y_obs[valid], y_pred[valid])^2
+  rmse <- sqrt(mean((y_obs[valid] - y_pred[valid])^2))
+  
+  c(R2 = r2, RMSE = rmse)
 })
+
+# Transposer pour avoir un tableau plus lisible
+metrics_table_RR <- t(metrics_table_RR)
+metrics_table_RR
 
 # -----------------------------
 # 7. Add GAM-smoothed predictions to dataset
@@ -759,6 +819,7 @@ metrics_by_depth <- FULL_sun2_sub %>%
   group_by(depth_group) %>%
   summarise(
     n_points = n(),
+    n_studies   = n_distinct(id_article),
     pseudo_R2 = cor(yi, y_gam)^2,
     RMSE = sqrt(mean((yi - y_gam)^2, na.rm = TRUE)),
     MAE  = mean(abs(yi - y_gam), na.rm = TRUE),
@@ -766,7 +827,44 @@ metrics_by_depth <- FULL_sun2_sub %>%
     .groups = "drop"
   )
 
-metrics_by_depth$RGBOOST <- r2_table
+metrics_table_RR<-data.frame(metrics_table_RR)
+metrics_by_depth$XGBOOST_R2 <- metrics_table_RR$R2  # Add XGBoost R² for comparison
+metrics_by_depth$XGBOOST_RMSE <- metrics_table_RR$RMSE  # Add XGBoost R² for comparison
+
+
+# Prepare the compact table
+compact_table <- metrics_by_depth %>%
+  transmute(
+    Depth  = depth_group,
+    Obs = paste0(n_points, " (", n_studies, ")"),
+    `XGB \n R2`  = XGBOOST_R2,
+    `XGB \n RMSE` = XGBOOST_RMSE,
+    `GAM \n RMSE` = RMSE
+  )
+
+# Create the table grob with white background and readable text
+tab_grob <- tableGrob(
+  compact_table %>% mutate(across(where(is.numeric), round, 2)),
+  rows = NULL,
+  theme = ttheme_default(
+    core = list(fg_params = list(cex = 0.8, fontface = "plain"),
+                bg_params = list(fill = "white", col = NA)),
+    colhead = list(fg_params = list(cex = 0.8, fontface = "bold"),
+                   bg_params = list(fill = "white", col = NA))
+  )
+)
+
+# Overlay the table on an existing ggplot
+p_inset <- plot +
+  annotation_custom(
+    grob = tab_grob,
+    xmin = 100, xmax = 200,    # X-axis position
+    ymin = 1.5, ymax = 3   # Y-axis position
+  )
+
+# Display the plot with the inset table
+p_inset
+
 
 
 # 4. GAM with depth interaction

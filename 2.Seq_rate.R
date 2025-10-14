@@ -692,7 +692,7 @@ print(aov_lang)
 # variance components are accounted for.
 
 exclude <- c(128, 130, 198, 200, 201)
-FULL_sun2_clean <- FULL_sun2[-exclude, ]
+FULL_sun2_clean <- FULL_sun[-exclude, ]
 
 dim(FULL_sun2_clean)
 length(unique(FULL_sun2_clean$id_article))

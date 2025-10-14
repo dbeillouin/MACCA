@@ -1,86 +1,3 @@
-# Fit MetaForest model
-mf_rr <- MetaForest(
-  formula = yi ~ NEW_treatment_type2 + diff_species_class + History_reclass +
-    control_soc_mean_T_ha + precipitation + temperature + main_culture2 +
-    MEAN_depth + time_since_conversion + Grouped_Design,
-  data = FULL_sunRR,
-  study = "id_expérimentation",
-  whichweights = "random",
-  num.trees = 8000
-)
-
-plot(mf_rr)
-
-
-pred_values <- predict(mf_rr)
-
-# Compute residuals
-residuals <- mf_rr$data$yi - pred_values$predictions
-boxplot(residuals, main="Residuals")
-
-which(abs(residuals) > 3*sd(residuals))
-
-
-# Indices des outliers
-outliers <- c(107, 121, 155, 259, 262)
-
-# Dataset sans les outliers
-FULL_sunRR_clean <- FULL_sunRR[-outliers, ]
-unique(FULL_sunRR_clean$NEW_treatment_type2)
-
-
-# # Refitting du modèle MetaForest
-# mf_rr_clean <- MetaForest(
-#   formula = yi ~ NEW_treatment_type2 + diff_species_class + History_reclass +
-#     control_soc_mean_T_ha + precipitation + temperature + main_culture2 +
-#     MEAN_depth + time_since_conversion + Grouped_Design,
-#   data = FULL_sunRR_clean,
-#   study = "id_expérimentation",
-#   whichweights = "random",
-#   num.trees = 8000
-# )
-# library(ggplot2)
-# library(tidyr)
-# library(dplyr)
-# 
-# 
-# # Variables numériques
-# num_vars <- c("control_soc_mean_T_ha", "precipitation", "temperature", "MEAN_depth", "time_since_conversion")
-# 
-# # Préparer les données
-# num_data <- FULL_sunRR_clean %>%
-#   select(all_of(num_vars)) %>%
-#   pivot_longer(cols = everything(), names_to = "variable", values_to = "value")
-# 
-# # Plot
-# ggplot(num_data, aes(x = value)) +
-#   geom_histogram(bins = 30, fill = "steelblue", color = "black", alpha = 0.7) +
-#   facet_wrap(~variable, scales = "free_x") +
-#   theme_minimal() +
-#   labs(title = "Distribution des variables numériques",
-#        x = "", y = "")
-# 
-# 
-# # Variables catégorielles
-# cat_vars <- c("NEW_treatment_type2", "diff_species_class", "History_reclass", "main_culture2", "Grouped_Design")
-# 
-# # Préparer les données
-# cat_data <- FULL_sunRR_clean %>%
-#   select(all_of(cat_vars)) %>%
-#   pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>%
-#   mutate(value = as.factor(value))  # assure que c'est un factor
-# 
-# # Plot
-# ggplot(cat_data, aes(x = value)) +
-#   geom_bar(fill = "tomato", color = "black", alpha = 0.7) +
-#   facet_wrap(~variable, scales = "free_x") +
-#   theme_minimal() +
-#   labs(title = "Distribution des variables catégorielles",
-#        x = "", y = "")+ coord_flip()
-# 
-# 
-# 
-
 
 ##########################################
 # MetaForest & XGBoost Analysis
@@ -89,10 +6,13 @@ unique(FULL_sunRR_clean$NEW_treatment_type2)
 # Dataset: FULL_sunRR_clean
 ##########################################
 
+hist(FULL_sunRR_clean$yi)
+VERIF<-FULL_sunRR_clean %>% filter(yi>1.5) 
 
 library(caret)
 library(xgboost)
 library(Matrix)
+library(metaforest)
 
 #-----------------------------
 # 1. Tuning MetaForest
@@ -362,8 +282,8 @@ mf_seq_final <- MetaForest(
 # Predictions & metrics
 pred_mf <- predict(mf_seq_final)$predictions
 obs <- mf_seq_final$data$seq_rate
-R2_seq <- 1 - sum((obs - pred_mf$predictions)^2) / sum((obs - mean(obs))^2)
-RMSE_seq <- sqrt(mean((obs - pred_mf$predictions)^2))
+R2_seq <- 1 - sum((obs - pred_mf)^2) / sum((obs - mean(obs))^2)
+RMSE_seq <- sqrt(mean((obs - pred_mf)^2))
 
 # Residual plot
 boxplot(obs - pred_mf, main = "MetaForest Residuals (seq_rate)")

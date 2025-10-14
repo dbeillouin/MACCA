@@ -13,6 +13,9 @@
   # ---------------------------------------------
   # 0. Ensure factors are consistent (keep original levels)
   # ---------------------------------------------
+  FULL_sun2_sub_seq <- FULL_sun2_clean
+  FULL_sun2_sub_rr  <- FULL_sunRR_clean
+  
   factor_vars <- c("NEW_treatment_type2", "History_reclass", "diff_species_class")
   FULL_sun2_sub_seq[factor_vars] <- lapply(FULL_sun2_sub_seq[factor_vars], factor)
   FULL_sun2_sub_rr[factor_vars]  <- lapply(FULL_sun2_sub_rr[factor_vars], factor)
@@ -170,10 +173,18 @@
   ## For species, we adapt the initial conditions
   continuous_refs_species <- list(
    # MEAN_depth = depth_ref,
-    control_soc_mean_T_ha = soc_ref,
+    control_soc_mean_T_ha = median(FULL_sun2_sub_seq$control_soc_mean_T_ha, na.rm = TRUE),
   #  precipitation = precip_ref,
    # temperature = temp_ref,
     time_since_conversion = 5
+  )
+  
+ ## For land use history , we also adapt:
+  
+  categorical_refs_Hist <- list(
+    Grouped_Design = names(sort(table(FULL_sun2_sub_seq$Grouped_Design), decreasing = TRUE))[1],
+    diff_species_class = names(sort(table(FULL_sun2_sub_seq$diff_species_class), decreasing = TRUE))[1]
+   # History_reclass = names(sort(table(FULL_sun2_sub_seq$History_reclass), decreasing = TRUE))[4]
   )
   
   categorical_refs_species <- list(
@@ -196,7 +207,7 @@
   pdp_history   <- bootstrap_pdp_cat("History_reclass", xgb_seq, X_seq,
                                      n_boot = 500,
                                      continuous_refs = continuous_refs,
-                                     categorical_refs = categorical_refs,
+                                     categorical_refs = categorical_refs_Hist,
                                      cond_sample_vars = c("control_soc_mean_T_ha"),
                                      depth_vals = depth_vals_seq)
   
@@ -267,6 +278,7 @@
   # 8. Continuous and categorical refs for RR
   # ---------------------------------------------
   categorical_refs_rr <- categorical_refs
+  categorical_refs_rrHist<- categorical_refs_Hist
   
   # ---------------------------------------------
   # 9. Compute PDPs for RR
@@ -277,6 +289,14 @@
     time_since_conversion = 25,
     precipitation = median(FULL_sun2_sub_seq$precipitation, na.rm = TRUE)
   #  temperature = median(FULL_sun2_sub_seq$temperature, na.rm = TRUE)
+  )
+  
+  continuous_refs_rrHist <- list(
+    #  MEAN_depth = 20,
+   # control_soc_mean_T_ha = median(FULL_sun2_sub_seq$control_soc_mean_T_ha, na.rm = TRUE),
+    time_since_conversion = 25
+   # precipitation = median(FULL_sun2_sub_seq$precipitation, na.rm = TRUE)
+    #  temperature = median(FULL_sun2_sub_seq$temperature, na.rm = TRUE)
   )
   
   categorical_refs_species_rr <- list(
@@ -290,7 +310,7 @@
   ## For species, we adapt the initial conditions
   continuous_refs_species_rr <- list(
     # MEAN_depth = depth_ref,
-    control_soc_mean_T_ha = soc_ref,
+    control_soc_mean_T_ha = median(FULL_sun2_sub_seq$control_soc_mean_T_ha, na.rm = TRUE),
     #  precipitation = precip_ref,
     # temperature = temp_ref,
     time_since_conversion = 25
@@ -305,9 +325,9 @@
   
   pdp_history_rr   <- bootstrap_pdp_cat("History_reclass", xgb_rr, X_rr,
                                         n_boot = 500,
-                                        continuous_refs = continuous_refs_rr,
-                                        categorical_refs = categorical_refs_rr,
-                                        cond_sample_vars = c("control_soc_mean_T_ha"),
+                                        continuous_refs = continuous_refs_rrHist,
+                                        categorical_refs = categorical_refs_rrHist,
+                                        #cond_sample_vars = c("control_soc_mean_T_ha"),
                                         depth_vals = depth_vals_seq)
   
   pdp_species_rr   <- bootstrap_pdp_cat("diff_species_class", xgb_rr, X_rr,
@@ -378,64 +398,113 @@
 ####
  
   
+  # ===============================
+  # FAIR and Clear Data Summary Tables
+  # Author: Damien Beillouin
+  # Purpose: Generate descriptive statistics tables (mean ± SD, ANOVA) 
+  #          for numeric variables by categorical variables
+  #          and percentage tables for categorical variables
+  # ===============================
+  
+  # -----------------------------
+  # 0. Load libraries
+  # -----------------------------
   library(dplyr)
   library(tidyr)
   library(purrr)
+  library(broom)      # For tidy() on model outputs
+  library(tibble)     # For rownames_to_column()
   
-  # Fonction pour transformer une table d'une variable catégorielle
+  # -----------------------------
+  # 1. Define variables
+  # -----------------------------
+  # Categorical variables to group by
+  cat_vars <- c("NEW_treatment_type2", "History_reclass", "diff_species_class")
+  
+  # Numeric variables to summarize
+  num_vars <- c(
+    "control_soc_mean_T_ha", "seq_rate", "time_since_conversion",
+    "precipitation", "temperature", "MEAN_depth"
+  )
+  
+  # -----------------------------
+  # 2. Compute summary tables for numeric variables
+  # -----------------------------
+  numeric_tables_stats <- lapply(cat_vars, function(cat) {
+    
+    FULL_sun2_sub_seq %>%
+      dplyr::select(all_of(c(cat, num_vars))) %>%   # Keep only relevant columns
+      pivot_longer(
+        cols = all_of(num_vars),
+        names_to = "variable",
+        values_to = "value"
+      ) %>%
+      group_by(variable) %>%
+      summarise(
+        # Compute mean and SD per category
+        means = list(tapply(value, .data[[cat]], mean, na.rm = TRUE)),
+        sds   = list(tapply(value, .data[[cat]], sd, na.rm = TRUE)),
+        # Perform ANOVA per variable
+        anova = list(tidy(aov(value ~ .data[[cat]]))),
+        .groups = "drop"
+      )
+  })
+  
+  # Example: view results for the first categorical variable
+  numeric_tables_stats[[1]]
+  
+  # -----------------------------
+  # 3. Function to format numeric summary tables
+  # -----------------------------
   format_numeric_table <- function(table_stat, cat_var_levels) {
+    
     table_stat %>%
       mutate(
-        # Construire des chaînes "moyenne ± sd" pour chaque niveau
+        # Combine mean and SD into "mean ± SD" strings for each category
         level_means = map2(means, sds, ~ paste0(round(.x, 2), " ± ", round(.y, 2))),
-        # Extraire la p-value globale de l'ANOVA
+        # Extract the global p-value from the ANOVA
         p.value = map_dbl(anova, ~ .x$p.value[1])
       ) %>%
-      # Déplier la liste de level_means en colonnes pour chaque niveau
+      # Assign column names for each category level
       mutate(level_means = map(level_means, ~ set_names(.x, cat_var_levels))) %>%
+      # Expand list columns into separate columns
       unnest_wider(level_means) %>%
-      select(variable, all_of(cat_var_levels), p.value)
+      dplyr::select(variable, all_of(cat_var_levels), p.value)
   }
   
-  # Exemple pour la première variable catégorielle
+  # Example usage: first categorical variable
   cat_var <- cat_vars[1]
   cat_var_levels <- levels(FULL_sun2_sub_seq[[cat_var]])
-  
   numeric_table_clean <- format_numeric_table(numeric_tables_stats[[1]], cat_var_levels)
-  
   numeric_table_clean
   
-  
-  
-  
-  # Fonction pour formater une table de variable catégorielle
-  library(dplyr)
-  library(tidyr)
-  
-  # Fonction pour formater une table catégorielle (en % uniquement)
+  # -----------------------------
+  # 4. Function to create categorical tables in %
+  # -----------------------------
   format_categorical_table_perc <- function(data, target, cat_var) {
-    
+    # Create contingency table
     tab <- table(data[[cat_var]], data[[target]])
     
+    # Convert to percentages per column
     tab_perc <- prop.table(tab, margin = 2) * 100
-    perc_df <- as.data.frame.matrix(tab_perc) |>
-      tibble::rownames_to_column("level") |>
-      dplyr::mutate(variable = cat_var)
+    
+    # Convert to tidy dataframe
+    perc_df <- as.data.frame.matrix(tab_perc) %>%
+      tibble::rownames_to_column("level") %>%
+      mutate(variable = cat_var)
     
     return(perc_df)
   }
   
-  # Liste des variables catégorielles
-  cat_vars <- c("main_culture2","History_reclass","Grouped_Design")
+  # List of categorical variables to summarize
+  cat_vars_perc <- c("main_culture2", "History_reclass", "Grouped_Design")
   
-  # Boucle sur toutes les variables
-  cat_tables <- lapply(cat_vars, function(v) {
+  # Loop over variables to generate all tables
+  cat_tables <- lapply(cat_vars_perc, function(v) {
     format_categorical_table_perc(FULL_sun2_sub_seq, "NEW_treatment_type2", v)
   })
   
-  # Résultats combinés
-  cat_tables_all <- dplyr::bind_rows(cat_tables)
+  # Combine all categorical tables
+  cat_tables_all <- bind_rows(cat_tables)
   cat_tables_all
-  
-  
   

@@ -33,7 +33,8 @@ FULL_sun <- FULL_sun %>%
   )
 
 # Filter out rows with missing target variable
-FULL_sun2 <- FULL_sun %>% filter(!is.na(control_soc_mean_T_ha))
+FULL_sun2 <- FULL_sun %>% filter(!is.na(control_soc_mean_T_ha), 
+                                 !is.na(time_since_conversion))
 
 # Fit MetaForest model
 mf_seq <- MetaForest(
@@ -388,7 +389,7 @@ barplot_simple <- ggplot(overall_summary, aes(
   coord_flip()+
   theme_minimal(base_size = 14) +
   theme(
-    axis.title = element_blank(),
+  #  axis.title = element_blank(),
     axis.text = element_text(size = 12),
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank(),
@@ -397,6 +398,9 @@ barplot_simple <- ggplot(overall_summary, aes(
   labs(
     fill = "Selection Frequency",
     color = "Dataset",
+    y= "Relative mean importance",
+    x=""
   )
 
 print(barplot_simple)
+

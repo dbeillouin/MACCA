@@ -542,11 +542,11 @@ print(aov_lang)
 #   between English and Spanish publications once within- and between-study
 #   variance components are accounted for.
 
-# Indices des outliers
+# Indices des points 
 Exclude <- c(107, 121, 155, 259, 262)
 
 # Dataset sans les outliers
 FULL_sunRR_clean <- FULL_sunRR[-Exclude, ]
 
  dim(FULL_sunRR_clean)
-length(unique(FULL_sunRR_clean$id_article))
+length(unique(FULL_sunRR_clean$Authors))
