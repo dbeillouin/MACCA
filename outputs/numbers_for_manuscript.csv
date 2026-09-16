@@ -1,0 +1,230 @@
+key,value,section,note
+n_rows_corrected,"29 corrections, 263 cells","2.2, response letter",NA
+n_obs_without_original_ID,RR 15; storage rate 0,data note,IDs generated; fill them in the database
+n_obs_RR,322,"2.1, 3.1, Fig. 2, Abstract",NA
+n_studies_RR,52,"2.1, 3.1, Fig. 2, Abstract",NA
+n_obs_storage_rate,277,"2.1, 3.1, Fig. 2, Abstract",NA
+n_studies_storage_rate,42,"2.1, 3.1, Fig. 2, Abstract",NA
+n_studies_union,54,3.1,NA
+n_obs_removed_by_study_exclusion,RR 15; storage rate 15,2.1 (new exclusion paragraph),NA
+pct_spanish_studies,42.59,3.1,NA
+pct_obs_sd_imputed_RR,24.22,2.2 (12%),NA
+n_obs_time_imputed_RR,56,2.2,median imputation of time since conversion: to describe in Methods
+RR_overall_estimate_%,6.809,"3.1, Abstract, Conclusion",NA
+RR_overall_CI,[1.7; 12.18],3.1,NA
+RR_I2_total,88.4,"3.1, Abstract",NA
+RR_I2_between_study_share_of_heterogeneity,67.07,3.1 (~60%),NA
+RR_LRT_within_study_level,"LRT=413.42, p=6.6e-92",2.4,NA
+RR_LRT_between_study_level,"LRT=83.04, p=8.03e-20",2.4,NA
+RR_topsoil_0_30_estimate_%,6.84 [0.97; 13.04],"3.1, Abstract",subset of observations with lower sampling bound <= 30 cm; check this matches the former definition
+RR_language_LRT,"LRT=0.32, p=0.571",3.1,NA
+RR_Egger_p,0.6025,3.1,NA
+RR_tau_change_2_to_10_years_pct,13.59,3.1,residual heterogeneity SD; the text currently says 'uncertainty (SD)'
+RR_SD_randomized_vs_reference_design_pct,61.18,3.1 (+481%),reference level: Before-After Designs
+RR_scale_model_LRT_design_time,p=0.000602,"3.1, Fig. S7",NA
+storage_rate_overall_estimate_Mg C ha-1 yr-1,0.2586,"3.1, Abstract, Conclusion",NA
+storage_rate_overall_CI,[0.05; 0.47],3.1,NA
+storage_rate_I2_total,76.01,"3.1, Abstract",NA
+storage_rate_I2_between_study_share_of_heterogeneity,81.46,3.1 (~60%),NA
+storage_rate_LRT_within_study_level,"LRT=61.04, p=5.58e-15",2.4,NA
+storage_rate_LRT_between_study_level,"LRT=62.26, p=3.01e-15",2.4,NA
+storage_rate_topsoil_0_30_estimate_Mg C ha-1 yr-1,0.22 [-0.01; 0.45],"3.1, Abstract",subset of observations with lower sampling bound <= 30 cm; check this matches the former definition
+storage_rate_language_LRT,"LRT=0.64, p=0.423",3.1,NA
+storage_rate_Egger_p,0.402,3.1,NA
+storage_rate_tau_change_2_to_10_years_pct,-28.88,3.1,residual heterogeneity SD; the text currently says 'uncertainty (SD)'
+storage_rate_SD_randomized_vs_reference_design_pct,77.42,3.1 (+481%),reference level: Before-After Designs
+storage_rate_scale_model_LRT_design_time,p=3.47e-06,"3.1, Fig. S7",NA
+RR_MetaForest_OOB_R2,0.3693,3.2,NA
+RR_n_outliers_removed,4,2.5 (new outlier sentence),MetaForest residuals
+RR_xgb_nrounds,76,2.5,NA
+RR_R2_out_of_sample_study_grouped,0.02797,"3.2, response letter",report this one as out-of-sample
+RR_RMSE_out_of_sample_study_grouped,0.2211,3.2,NA
+RR_R2_random_row_CV,0.4861,3.2,within-dataset: other layers of the same profile can be in the training folds
+RR_R2_profile_grouped_CV,0.1259,3.2,new agroforestry/control comparison (all depths of a profile held out together)
+RR_n_profiles,90,3.2,NA
+RR_R2_CV_sd_across_repeats,random 0.02; profile 0.12; study 0.06,3.2,NA
+RR_R2_in_sample,0.734,3.2,former scripts reported this as R²
+RR_importance_pct_control_soc_mean_T_ha,34.18,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_time_since_conversion,15.39,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_temperature,13.97,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_precipitation,13.92,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_MEAN_depth,7.093,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_main_culture2,4.92,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_History_reclass,3.959,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_NEW_treatment_type2,2.92,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_diff_species_class,2.676,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_importance_pct_Grouped_Design,0.9774,"3.2, Abstract, Conclusion, Fig. 3a",NA
+RR_interaction_share_NEW_treatment_type2,0.6384,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_diff_species_class,0.6946,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_History_reclass,0.469,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_control_soc_mean_T_ha,0.3869,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_precipitation,0.5077,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_temperature,0.5197,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_main_culture2,0.399,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_MEAN_depth,0.6052,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_time_since_conversion,0.4848,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_interaction_share_Grouped_Design,0.5926,"3.2, 4 (0.86 / 0.807 ...)",NA
+RR_depth_share_of_initialSOC_interactions_pct,7.137,3.4 (63%),NA
+storage_rate_MetaForest_OOB_R2,0.1164,3.2,NA
+storage_rate_n_outliers_removed,4,2.5 (new outlier sentence),MetaForest residuals
+storage_rate_xgb_nrounds,29,2.5,NA
+storage_rate_R2_out_of_sample_study_grouped,0.03312,"3.2, response letter",report this one as out-of-sample
+storage_rate_RMSE_out_of_sample_study_grouped,1.138,3.2,NA
+storage_rate_R2_random_row_CV,0.2937,3.2,within-dataset: other layers of the same profile can be in the training folds
+storage_rate_R2_profile_grouped_CV,0.124,3.2,new agroforestry/control comparison (all depths of a profile held out together)
+storage_rate_n_profiles,64,3.2,NA
+storage_rate_R2_CV_sd_across_repeats,random 0.03; profile 0.07; study 0.11,3.2,NA
+storage_rate_R2_in_sample,0.5484,3.2,former scripts reported this as R²
+storage_rate_importance_pct_control_soc_mean_T_ha,42.52,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_time_since_conversion,17.27,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_temperature,12.08,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_precipitation,9.914,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_History_reclass,5.741,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_MEAN_depth,4.11,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_NEW_treatment_type2,3.522,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_main_culture2,2.206,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_Grouped_Design,1.597,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_importance_pct_diff_species_class,1.043,"3.2, Abstract, Conclusion, Fig. 3a",NA
+storage_rate_interaction_share_NEW_treatment_type2,0.3912,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_diff_species_class,0.7597,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_History_reclass,0.4112,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_control_soc_mean_T_ha,0.3963,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_precipitation,0.5353,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_temperature,0.5131,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_main_culture2,0.43,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_MEAN_depth,0.6374,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_time_since_conversion,0.4224,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_interaction_share_Grouped_Design,0.6257,"3.2, 4 (0.86 / 0.807 ...)",NA
+storage_rate_depth_share_of_initialSOC_interactions_pct,4.437,3.4 (63%),NA
+RR_PDP_time_2y_0-30 cm,7.64 [4.00; 12.60],"3.3, 4, Abstract",NA
+RR_PDP_time_7y_0-30 cm,2.51 [-0.37; 8.27],"3.3, 4, Abstract",NA
+RR_PDP_time_20y_0-30 cm,14.35 [4.81; 22.51],"3.3, 4, Abstract",NA
+RR_PDP_initialSOC_25_0-30 cm,5.10 [0.53; 13.31],3.4,NA
+RR_PDP_slope_per_10MgC_initialSOC_0-30 cm,-0.3813,3.4,percentage points per 10 Mg C ha-1
+RR_PDP_initialSOC_zero_crossing_0-30 cm,none,"3.4, Abstract (~80)",NA
+RR_PDP_time_2y_45-75 cm,outside observed range (3-16),"3.3, 4, Abstract",NA
+RR_PDP_time_7y_45-75 cm,8.94 [4.16; 17.62],"3.3, 4, Abstract",NA
+RR_PDP_time_20y_45-75 cm,outside observed range (3-16),"3.3, 4, Abstract",NA
+RR_PDP_initialSOC_25_45-75 cm,8.78 [-0.74; 19.25],3.4,NA
+RR_PDP_slope_per_10MgC_initialSOC_45-75 cm,-1.702,3.4,percentage points per 10 Mg C ha-1
+RR_PDP_initialSOC_zero_crossing_45-75 cm,none,"3.4, Abstract (~80)",NA
+RR_test_depth_x_time_since_conversion,"additive: LRT=0.17, p=0.681; interaction: LRT=2.02 (df=3), p=0.569","3.3-3.5, 4",NA
+RR_test_depth_x_control_soc_mean_T_ha,"additive: LRT=0.15, p=0.698; interaction: LRT=2.54 (df=3), p=0.469","3.3-3.5, 4",NA
+RR_test_depth_x_temperature,"additive: LRT=0.01, p=0.916; interaction: LRT=1.59 (df=3), p=0.662","3.3-3.5, 4",NA
+RR_test_depth_x_precipitation,"additive: LRT=0.02, p=0.891; interaction: LRT=14.39 (df=3), p=0.00242","3.3-3.5, 4",NA
+storage_rate_PDP_time_2y_0-30 cm,0.59 [0.13; 0.99],"3.3, 4, Abstract",NA
+storage_rate_PDP_time_7y_0-30 cm,0.23 [-0.02; 0.41],"3.3, 4, Abstract",NA
+storage_rate_PDP_time_20y_0-30 cm,0.29 [0.15; 0.44],"3.3, 4, Abstract",NA
+storage_rate_PDP_initialSOC_25_0-30 cm,0.24 [0.10; 0.50],3.4,NA
+storage_rate_PDP_slope_per_10MgC_initialSOC_0-30 cm,-0.04101,3.4,Mg C ha-1 yr-1 per 10 Mg C ha-1
+storage_rate_PDP_initialSOC_zero_crossing_0-30 cm,84.8,"3.4, Abstract (~80)",NA
+storage_rate_PDP_time_2y_45-75 cm,outside observed range (3-15),"3.3, 4, Abstract",NA
+storage_rate_PDP_time_7y_45-75 cm,0.32 [-0.06; 0.62],"3.3, 4, Abstract",NA
+storage_rate_PDP_time_20y_45-75 cm,outside observed range (3-15),"3.3, 4, Abstract",NA
+storage_rate_PDP_initialSOC_25_45-75 cm,0.33 [0.05; 0.65],3.4,NA
+storage_rate_PDP_slope_per_10MgC_initialSOC_45-75 cm,-0.08465,3.4,Mg C ha-1 yr-1 per 10 Mg C ha-1
+storage_rate_PDP_initialSOC_zero_crossing_45-75 cm,60.7,"3.4, Abstract (~80)",NA
+storage_rate_test_depth_x_time_since_conversion,"additive: LRT=1.69, p=0.194; interaction: LRT=2.11 (df=3), p=0.549","3.3-3.5, 4",NA
+storage_rate_test_depth_x_control_soc_mean_T_ha,"additive: LRT=0.53, p=0.466; interaction: LRT=1.68 (df=3), p=0.641","3.3-3.5, 4",NA
+storage_rate_test_depth_x_temperature,"additive: LRT=2.52, p=0.112; interaction: LRT=0.54 (df=3), p=0.91","3.3-3.5, 4",NA
+storage_rate_test_depth_x_precipitation,"additive: LRT=2.45, p=0.117; interaction: LRT=3.57 (df=3), p=0.311","3.3-3.5, 4",NA
+RR_n_obs_total_after_outliers,318,4 caveat [N],NA
+RR_n_obs_older_than_20y,24,4 caveat [n],NA
+RR_n_studies_older_than_20y,7,4 caveat [k],NA
+RR_max_depth_midpoint_older_than_20y_cm,25,"4 caveat, response letter",NA
+RR_max_time_below_40cm_y,16,response letter,NA
+RR_n_obs_below_40cm_and_20y_or_more,0,response letter,NA
+storage_rate_n_obs_total_after_outliers,249,4 caveat [N],NA
+storage_rate_n_obs_older_than_20y,19,4 caveat [n],NA
+storage_rate_n_studies_older_than_20y,5,4 caveat [k],NA
+storage_rate_max_depth_midpoint_older_than_20y_cm,25,"4 caveat, response letter",NA
+storage_rate_max_time_below_40cm_y,15,response letter,NA
+storage_rate_n_obs_below_40cm_and_20y_or_more,0,response letter,NA
+RR_modtest_initial_SOC_linear,"LRT=17.62 (df=1), p=2.69e-05; slope -0.0019 [-0.0027; -0.0010]","3.2-3.6, 4",NA
+RR_modtest_initial_SOC_spline,"LRT=20.79 (df=3), p=0.000116","3.2-3.6, 4",NA
+RR_modtest_time_linear,"LRT=4.35 (df=1), p=0.0369; slope 0.0041 [0.0004; 0.0077]","3.2-3.6, 4",NA
+RR_modtest_time_spline,"LRT=11.68 (df=3), p=0.00856","3.2-3.6, 4",NA
+RR_modtest_precipitation_spline,"LRT=9.55 (df=3), p=0.0228","3.2-3.6, 4",NA
+RR_modtest_temperature_spline,"LRT=11.56 (df=3), p=0.00906","3.2-3.6, 4",NA
+RR_modtest_depth_spline,"LRT=1.85 (df=3), p=0.603","3.2-3.6, 4",NA
+RR_modtest_depth_linear,"LRT=0.16 (df=1), p=0.686; slope 0.0003 [-0.0013; 0.0020]","3.2-3.6, 4",NA
+RR_modtest_agroforestry_type,"LRT=1.68 (df=4), p=0.794","3.2-3.6, 4",NA
+RR_modtest_land_use_history,"LRT=1.01 (df=3), p=0.799","3.2-3.6, 4",NA
+RR_modtest_species_added,"LRT=0.21 (df=1), p=0.644","3.2-3.6, 4",NA
+RR_modtest_crop,"LRT=4.80 (df=3), p=0.187","3.2-3.6, 4",NA
+RR_modtest_design,"LRT=0.91 (df=2), p=0.633","3.2-3.6, 4",NA
+RR_heterogeneity_explained_all_biophysical,total 15.9%; between-study 18.8%; within-study 9.9%,"3.2, 4, response letter",proportional reduction of variance components (REML)
+RR_modtest_all_biophysical,"LRT=43.57 (df=13), p=3.61e-05","3.2-3.6, 4",NA
+RR_heterogeneity_explained_all_management,total 0.0%; between-study 0.0%; within-study 0.0%,"3.2, 4, response letter",proportional reduction of variance components (REML)
+RR_modtest_all_management,"LRT=7.59 (df=13), p=0.869","3.2-3.6, 4",NA
+storage_rate_modtest_initial_SOC_linear,"LRT=2.71 (df=1), p=0.0997; slope -0.0069 [-0.0151; 0.0013]","3.2-3.6, 4",NA
+storage_rate_modtest_initial_SOC_spline,"LRT=12.08 (df=3), p=0.00711","3.2-3.6, 4",NA
+storage_rate_modtest_time_linear,"LRT=0.76 (df=1), p=0.382; slope -0.0065 [-0.0212; 0.0081]","3.2-3.6, 4",NA
+storage_rate_modtest_time_spline,"LRT=7.36 (df=3), p=0.0613","3.2-3.6, 4",NA
+storage_rate_modtest_precipitation_spline,"LRT=2.94 (df=3), p=0.402","3.2-3.6, 4",NA
+storage_rate_modtest_temperature_spline,"LRT=13.58 (df=3), p=0.00353","3.2-3.6, 4",NA
+storage_rate_modtest_depth_spline,"LRT=6.00 (df=3), p=0.112","3.2-3.6, 4",NA
+storage_rate_modtest_depth_linear,"LRT=2.94 (df=1), p=0.0864; slope 0.0076 [-0.0008; 0.0159]","3.2-3.6, 4",NA
+storage_rate_modtest_agroforestry_type,"LRT=0.86 (df=3), p=0.836","3.2-3.6, 4",NA
+storage_rate_modtest_land_use_history,"LRT=1.43 (df=3), p=0.699","3.2-3.6, 4",NA
+storage_rate_modtest_species_added,"LRT=0.08 (df=1), p=0.779","3.2-3.6, 4",NA
+storage_rate_modtest_crop,"LRT=1.54 (df=3), p=0.673","3.2-3.6, 4",NA
+storage_rate_modtest_design,"LRT=3.81 (df=2), p=0.149","3.2-3.6, 4",NA
+storage_rate_heterogeneity_explained_all_biophysical,total 30.2%; between-study 30.8%; within-study 27.7%,"3.2, 4, response letter",proportional reduction of variance components (REML)
+storage_rate_modtest_all_biophysical,"LRT=33.97 (df=13), p=0.00122","3.2-3.6, 4",NA
+storage_rate_heterogeneity_explained_all_management,total 0.0%; between-study 0.0%; within-study 0.0%,"3.2, 4, response letter",proportional reduction of variance components (REML)
+storage_rate_modtest_all_management,"LRT=7.29 (df=12), p=0.838","3.2-3.6, 4",NA
+RR_rob_A_initialSOC_predictions,20: 19.16 [10.74; 28.23] | 40: 7.78 [1.43; 14.54] | 60: 4.45 [-1.24; 10.48] | 90: 1.31 [-5.32; 8.41] | 130: -4.18 [-12.00; 4.33],"3.x initial SOC, Abstract",NA
+RR_rob_A_initialSOC_data_density,"(-Inf,30]: 97 obs/17 studies | (30,50]: 83 obs/23 studies | (50,70]: 61 obs/18 studies | (70,100]: 42 obs/16 studies | (100, Inf]: 39 obs/9 studies","3.x, caption",NA
+RR_rob_A_initialSOC_slope_per_10MgC,"-1.843 [-2.688; -0.990] (percentage points), p = 2.69e-05",3.x,NA
+RR_rob_A_initialSOC_LOSO,max p without one study = 0.000911; studies whose removal makes p > 0.05 or flips sign: none,"3.x, response letter",NA
+RR_rob_B_temperature_data_density,"(-Inf,20]: 36 obs/8 studies | (20,22]: 74 obs/12 studies | (22,24]: 19 obs/7 studies | (24,26]: 45 obs/12 studies | (26,28]: 136 obs/16 studies | (28, Inf]: 12 obs/2 studies","3.x, caption",NA
+RR_rob_B_temperature_predictions,18 C: -1.21 [-9.72; 8.09] | 21 C: 0.67 [-7.07; 9.06] | 24 C: 4.22 [-1.75; 10.55] | 27 C: 13.24 [5.78; 21.22] | 29 C: 25.04 [11.33; 40.45],3.x,NA
+RR_rob_B_temperature_shape_AIC,linear -50.3; spline -49.0; best threshold at 26 C: -51.9 (dAIC vs linear = -1.7),3.x,a threshold is supported only if dAIC < -2 AND the LOSO below is stable
+RR_rob_B_temperature_given_system_type,"LRT=10.54, p=0.0145","3.x, 4",NA
+RR_rob_B_temperature_given_type_SOC_precip,"LRT=4.81, p=0.186","3.x, 4",NA
+RR_rob_B_temperature_by_system,"Alley/Hedgerow: 20.4 C (0% > 26 C, n=43) | Multistrata system: 25.3 C (47% > 26 C, n=32) | Other: 25.6 C (33% > 26 C, n=3) | Shaded perennial: 22 C (6% > 26 C, n=72) | SilvoPasture: 26.2 C (74% > 26 C, n=172)",4,NA
+RR_rob_B_corr_temperature_altitude,-0.8728,4,NA
+RR_rob_B_temperature_linear_LOSO,max p without one study = 0.0239; studies whose removal makes p > 0.05 or flips sign: none,"3.x, response letter",NA
+RR_rob_B_temperature_spline_LOSO,max p without one study = 0.0447; studies whose removal makes p > 0.05 or flips sign: none,"3.x, response letter",non-linear shape: check monotonicity in B_temperature_predictions before interpreting
+RR_rob_B_temperature_without_sites_above_28C,"sites > 28 C: 12 obs / 2 studies; spline test without them: LRT=8.47, p=0.0372","3.x, caption",NA
+RR_rob_B_AIC_temperature_vs_altitude,spline temperature AIC -49.0 vs spline altitude AIC -51.3 (n=322),4,NA
+RR_rob_C_SOCxTemperature_LRT,"LRT=11.46, p=0.000712","3.x, 4",NA
+RR_rob_C_SOC_slope_per_10MgC_at_22_and_28C_logscale,22 C: -0.015 [-0.024; -0.006] | 28 C: -0.035 [-0.048; -0.021],3.x,log response ratio per 10 Mg C ha-1
+RR_rob_C_SOCxTemperature_LOSO,max p without one study = 0.0102; studies whose removal makes p > 0.05 or flips sign: none,"3.x, response letter",NA
+RR_rob_C_SOCxTemperature_given_system_type,"LRT=11.92, p=0.000556",3.x,NA
+RR_rob_D_short_term_by_design_counts,<=3 y Before-After Designs: 8/1 | <=3 y Control-Impact Designs: 14/4 | >3 y Before-After Designs: 31/6 | >3 y Control-Impact Designs: 163/34 | >3 y Randomized Designs: 106/10,3.x,NA
+RR_rob_D_short_x_design_LRT,"LRT=0.10, p=0.754","3.x, 4",NA
+RR_rob_D_effect_short_vs_longer,<=3 y: 7.78 [-3.28; 20.09] | >3 y: 6.74 [1.56; 12.18],3.x,NA
+RR_rob_D_short_term_effect_persists_given_SOC_temp,p=0.611,3.x,NA
+RR_rob_E_depthxprecip_LRT,"LRT=10.91, p=0.000956; deep (>=30 cm): 99 obs / 16 studies, time 3-19 y",3.x (exploratory),NA
+RR_rob_E_depthxprecip_LOSO,max p without one study = 0.0337; studies whose removal makes p > 0.05 or flips sign: none,response letter,NA
+RR_rob_F_grey_literature,"LRT=0.61, p=0.433; grey: 93 obs / 13 studies","3.1, 4",NA
+storage_rate_rob_A_initialSOC_predictions,20: 0.47 [0.17; 0.78] | 40: 0.15 [-0.12; 0.43] | 60: 0.47 [0.10; 0.84] | 90: 0.20 [-0.34; 0.74] | 130: -1.20 [-2.47; 0.07],"3.x initial SOC, Abstract",NA
+storage_rate_rob_A_initialSOC_data_density,"(-Inf,30]: 84 obs/15 studies | (30,50]: 74 obs/22 studies | (50,70]: 51 obs/15 studies | (70,100]: 26 obs/10 studies | (100, Inf]: 18 obs/4 studies","3.x, caption",NA
+storage_rate_rob_A_initialSOC_slope_per_10MgC,"-0.069 [-0.151; 0.013] (Mg C ha-1 yr-1), p = 0.0997",3.x,NA
+storage_rate_rob_A_initialSOC_LOSO,not significant with all studies (p = 0.0997): LOSO not informative,"3.x, response letter",NA
+storage_rate_rob_B_temperature_data_density,"(-Inf,20]: 31 obs/6 studies | (20,22]: 68 obs/12 studies | (22,24]: 14 obs/4 studies | (24,26]: 30 obs/10 studies | (26,28]: 106 obs/13 studies | (28, Inf]: 4 obs/1 studies","3.x, caption",NA
+storage_rate_rob_B_temperature_predictions,18 C: 0.17 [-0.32; 0.67] | 21 C: 0.50 [0.13; 0.86] | 24 C: 0.05 [-0.20; 0.31] | 27 C: 0.22 [-0.05; 0.50] | 29 C: 1.60 [0.82; 2.38],3.x,NA
+storage_rate_rob_B_temperature_shape_AIC,linear 840.4; spline 833.0; best threshold at 27 C: 836.3 (dAIC vs linear = -4.0),3.x,a threshold is supported only if dAIC < -2 AND the LOSO below is stable
+storage_rate_rob_B_temperature_given_system_type,"LRT=16.34, p=0.000968","3.x, 4",NA
+storage_rate_rob_B_temperature_given_type_SOC_precip,"LRT=17.91, p=0.000459","3.x, 4",NA
+storage_rate_rob_B_temperature_by_system,"Alley/Hedgerow: 20.5 C (0% > 26 C, n=42) | Other: 25.4 C (27% > 26 C, n=11) | Shaded perennial: 21.8 C (3% > 26 C, n=61) | SilvoPasture: 26.2 C (76% > 26 C, n=139)",4,NA
+storage_rate_rob_B_corr_temperature_altitude,-0.8924,4,NA
+storage_rate_rob_B_temperature_linear_LOSO,not significant with all studies (p = 0.136): LOSO not informative,"3.x, response letter",NA
+storage_rate_rob_B_temperature_spline_LOSO,max p without one study = 0.0147; studies whose removal makes p > 0.05 or flips sign: none,"3.x, response letter",non-linear shape: check monotonicity in B_temperature_predictions before interpreting
+storage_rate_rob_B_temperature_without_sites_above_28C,"sites > 28 C: 4 obs / 1 studies; spline test without them: LRT=13.85, p=0.00311","3.x, caption",NA
+storage_rate_rob_B_AIC_temperature_vs_altitude,spline temperature AIC 833.0 vs spline altitude AIC 843.5 (n=253),4,NA
+storage_rate_rob_C_SOCxTemperature_LRT,"LRT=0.05, p=0.819","3.x, 4",NA
+storage_rate_rob_C_SOC_slope_per_10MgC_at_22_and_28C_logscale,22 C: -0.057 [-0.141; 0.027] | 28 C: -0.045 [-0.176; 0.086],3.x,Mg C ha-1 yr-1 per 10 Mg C ha-1
+storage_rate_rob_C_SOCxTemperature_LOSO,not significant with all studies (p = 0.819): LOSO not informative,"3.x, response letter",NA
+storage_rate_rob_C_SOCxTemperature_given_system_type,"LRT=0.03, p=0.861",3.x,NA
+storage_rate_rob_D_short_term_by_design_counts,<=3 y Before-After Designs: 8/1 | <=3 y Control-Impact Designs: 14/4 | >3 y Before-After Designs: 25/7 | >3 y Control-Impact Designs: 100/22 | >3 y Randomized Designs: 106/10,3.x,NA
+storage_rate_rob_D_short_x_design_LRT,"LRT=1.01, p=0.316","3.x, 4",NA
+storage_rate_rob_D_effect_short_vs_longer,<=3 y: 0.96 [-0.07; 1.99] | >3 y: 0.24 [0.03; 0.46],3.x,NA
+storage_rate_rob_D_short_term_effect_persists_given_SOC_temp,p=0.187,3.x,NA
+storage_rate_rob_E_depthxprecip_LRT,"LRT=0.06, p=0.809; deep (>=30 cm): 70 obs / 12 studies, time 3-19 y",3.x (exploratory),NA
+storage_rate_rob_E_depthxprecip_LOSO,not significant with all studies (p = 0.809): LOSO not informative,response letter,NA
+storage_rate_rob_F_grey_literature,"LRT=2.14, p=0.143; grey: 74 obs / 11 studies","3.1, 4",NA
+fig2_obs_without_coordinates,0,Fig. 2 caption,NA
+fig2_n_sites,52,Fig. 2 caption,NA

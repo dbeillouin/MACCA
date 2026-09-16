@@ -1,0 +1,30 @@
+id_article,country,field,new_value,rows_changed,reason
+33,Costa Rica,X_(WGS84),-83.716667,18,decimal separator lost
+137,Costa Rica,X_(WGS84),-83.6333,4,decimal separator lost
+139,Costa Rica,X_(WGS84),-83.6333,32,decimal separator lost
+163,Costa Rica,X_(WGS84),-83.6751,8,decimal separator lost
+58,Mexico,X_(WGS84),-92.533333,3,decimal separator lost
+54,Peru,X_(WGS84),-77.6683,4,decimal separator lost
+54,Peru,Y_(WGS84),-6.2056,4,missing minus sign (southern hemisphere)
+54,Peru,temperature,14.5,4,value had been filled with the database mean (26.4 °C) because coordinates were invalid; the article reports no climate data
+54,Peru,precipitation,1200,4,value had been filled with the database mean (2122 mm)
+153,Costa Rica,X_(WGS84),-84.70,10,Costa Rican site (Esparza) carried the Nicaraguan coordinates of the same study
+153,Costa Rica,Y_(WGS84),10.15,10,idem
+153,Colombia,X_(WGS84),-75.6333,3,missing coordinates
+153,Colombia,Y_(WGS84),4.4333,3,missing coordinates
+159,Nicaragua,X_(WGS84),-85.45,24,decimal separator lost
+159,Nicaragua,Y_(WGS84),12.8333,24,decimal separator lost (12°50'N = 12.8333; not 12.5)
+160,Nicaragua,X_(WGS84),-85.45,6,decimal separator lost
+160,Nicaragua,Y_(WGS84),12.8333,6,decimal separator lost (12°50'N)
+78,Peru,X_(WGS84),-76.7,12,missing coordinates; approximate centroid of the three study provinces (map only; climate reported in the article)
+78,Peru,Y_(WGS84),-6.4,12,idem
+158,Costa Rica,X_(WGS84),-83.68,2,missing coordinates; approximate location of Turrialba (map only; climate reported in the article)
+158,Costa Rica,Y_(WGS84),9.90,2,idem
+148,Costa Rica,X_(WGS84),-84.345,14,"missing coordinates; coffee sites in Grecia and Naranjo, Alajuela (1000–1100 m); midpoint of the two towns (map only; climate in the database matches the article)"
+148,Costa Rica,Y_(WGS84),10.085,14,idem
+148,Costa Rica,X_(WGS84),-83.735,4,"missing coordinates; silvopastoral sites in Guácimo and Pococí, Limón (200 m); midpoint of the two towns (map only; climate in the database matches the article)"
+148,Costa Rica,Y_(WGS84),10.21,4,idem
+155,Costa Rica,X_(WGS84),-82.8333,10,"the database used the corner of the study area (9°00'N, 82°35'W), which falls in Panama; replaced by the centre of the area reported in the article (map only)"
+155,Costa Rica,Y_(WGS84),9.4167,10,idem
+161,Costa Rica,X_(WGS84),-82.88,6,same corner coordinates as study 155 (Panama); replaced by the approximate centre of the Talamanca valley named in the thesis title (map only)
+161,Costa Rica,Y_(WGS84),9.57,6,idem

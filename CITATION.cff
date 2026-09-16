@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the article and the dataset."
+title: "MACCA: R code for the meta-analysis of soil organic carbon in Neotropical agroforestry systems"
+authors:
+  - family-names: Beillouin
+    given-names: Damien
+    affiliation: CIRAD, UPR HortSys, Montpellier, France
+repository-code: "https://github.com/dbeillouin/MACCA"
+license: MIT
+version: "R3-2026"
+date-released: "2026-09-16"
+references:
+  - type: dataset
+    title: "MACCA database"
+    doi: "10.18167/DVN1/GISJUZ"

@@ -1,102 +1,61 @@
-# MACCA: Mapping Agroforestry Carbon Change in the Americas
+# MACCA – Soil organic carbon under agroforestry in the Neotropics (meta-analysis)
 
-![R](https://img.shields.io/badge/R-%3E%3D4.0-blue)
-![License](https://img.shields.io/badge/license-GPL--3.0-lightgrey)
-![Status](https://img.shields.io/badge/status-Development-orange)
-![Software Heritage](https://img.shields.io/badge/Software%20Heritage-SWH-lightgrey)
+Code accompanying:
 
-**MACCA** is an R-based project developed by Damien Beillouin for analyzing soil carbon dynamics, sequestration rates, and environmental predictors using machine learning and statistical models. This repository accompanies the forthcoming article:
+> Beillouin D, Verstraete C, Cardinael R, Chabroux U, Laurent J-B, Waite P-A, Demenois J. *Baseline soil carbon and temporal drivers, not management, govern soil carbon sequestration in tropical agroforestry. A meta-analysis.* Agronomy for Sustainable Development (under review).
 
-**Beyond averages: depth, time, and context shape soil carbon outcomes in agroforestry in Latin America and the Caribbean**  
-*Damien Beillouin¹²*, Cloé Verstraete³⁴⁵, Rémi Cardinael⁴⁶⁷, Ulysse Chabroux²³⁸, Jean-Baptiste Laurent³⁴, Pierre-André Waite³⁴, Julien Demenois³⁴
-
----
-
-## Project Overview
-
-MACCA provides tools to:
-
-- Compute **response ratios (RR)** and **SOC accumulation rates**.  
-- Fit **machine learning models** (Random Forest, Gradient Boosting) and classical statistical models.  
-- Generate **partial dependence plots (PDPs)** and **variable importance plots**.  
-- Integrate **continuous and categorical environmental and management predictors**.  
-- Synthesize **region-specific SOC dynamics** in Latin America and the Caribbean.
-
----
-
-## Repository Structure
-
-```
-Scripts/
-├── 1_LOAD_DATA.R
-├── 2.RR.R
-├── 2.Seq_rate.R
-├── 3.Models.R
-├── 4.Importance_Plots.R
-├── 4.Importance_plot_GB.R
-├── 5.PDP_initialSOC_depthV2.R
-├── 5.PDP_precipitation.R
-├── 5_PDP_Temperature.R
-├── 6.PDP_categorial.R
-└── 6_PLOT_Synthesis_categorial.R
-```
-
-## Requirements
-
-- **R >= 4.0**  
-- Packages: `dplyr`, `tidyr`, `ggplot2`, `xgboost`, `mgcv`, `pdp`, `data.table`  
-
-Install missing packages with:
-
-```r
-install.packages(c("dplyr", "tidyr", "ggplot2", "xgboost", "mgcv", "pdp", "data.table"))
-```
-
-## Usage
-
-1. Clone the repository:
-
-git clone https://github.com/dbeillouin/MACCA.git
-
-
-2. Open R or RStudio and set the working directory to the repository.
-
-3. Run scripts sequentially from 1_LOAD_DATA.R onward. Outputs from previous scripts are required for downstream scripts.
-
-
-## Outputs
-
-Partial Dependence Plots (PDPs) for continuous and categorical predictors.
-
-Feature importance plots for Gradient Boosting and Random Forest models.
-
-Summary tables of response ratios and SOC accumulation rates.
-
+The workflow reproduces every number, table and figure of the article and of its Electronic Supplementary Material from a frozen version of the MACCA database.
 
 ## Data
 
-The analysis relies on the dataset hosted on CIRAD Dataverse:
+The database is not stored in this repository. Download it from the CIRAD Dataverse (https://doi.org/10.18167/DVN1/GISJUZ) and place it in `data/raw/`:
 
-DOI: : 10.18167/DVN1/GISJUZ
+| File | Content |
+|---|---|
+| `data/raw/MACCA_database_R3_corrected.csv` | database used for the analyses (corrected version, Dataverse) |
+| `data/data_corrections.csv` | documented corrections applied to the previous version of the database (status, reason, source) |
+| `data/prisma_counts.csv` | counts of the literature screening (Fig. S1) |
 
+The uncorrected version of the database remains available as an earlier version of the Dataverse record. If `data/raw/Data_for_analysis_R2_20260430.csv` is used instead of the corrected file, the corrections listed in `data/data_corrections.csv` are applied automatically, and both routes give identical results.
 
-Data Management & FAIR Compliance
+Studies excluded at the study level are declared in `00_run_all.R` (`EXCLUDED_STUDIES`).
 
-Fully reproducible workflow: scripts automatically generate all intermediate outputs.
+## Structure
 
-Metadata included: description of dataset, variables, and analysis pipeline.
+```
+00_run_all.R            runs the whole workflow (paths are relative to this file)
+R/utils.R               shared functions
+R/01_load_data.R        optional: rebuilds the database from the Excel export and WorldClim
+R/02_prepare_datasets.R corrections, study-level exclusions, SD imputation, effect sizes
+R/03_meta_analysis.R    three-level meta-analyses, heterogeneity, small-study effects, location-scale models
+R/04_ml_models.R        MetaForest outlier screening, XGBoost, cross-validation (random, profile, study), importance, SHAP interactions
+R/05_partial_dependence.R  partial dependence by depth class, restricted to observed ranges, study bootstrap
+R/06_categorical_effects.R standardized XGBoost predictions by category (Table S9)
+R/07_data_support.R     data coverage by depth and time since conversion
+R/08_moderator_tests.R  meta-regressions on observed effect sizes, heterogeneity explained
+R/09_robustness.R       leave-one-study-out, thresholds, confounding, sensitivity analyses
+R/10_figures.R          Figs. 2–4 and supplementary figures
+R/11_prisma.R           PRISMA flow diagram
+```
 
-Structured to maximize FAIR principles (Findable, Accessible, Interoperable, Reusable).
+## Running
 
-Compatible with Software Heritage harvesting for long-term archiving.
+```bash
+Rscript 00_run_all.R quick         # quick test (few bootstrap resamples)
+Rscript 00_run_all.R               # full run (about 20 min)
+Rscript 00_run_all.R only10 only11 # selected steps only
+Rscript 00_run_all.R with01        # rebuild the database (needs WorldClim rasters next to the project folder)
+```
 
-Versioned releases and issues enabled for reproducibility and community contributions.
+Required R packages: dplyr, tidyr, readr, readxl, forcats, stringr, purrr, metafor, metaforest, xgboost, splines, ggplot2, patchwork, maps, mapdata. Package versions used for the article are recorded in `outputs/sessionInfo.txt`.
 
-## License
+## Outputs (`outputs/`)
 
-This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the LICENSE file for details.
-
+* `numbers_for_manuscript.csv` – every number quoted in the article, with the section where it is used
+* `data/` – analysis datasets, corrected database, excluded studies, outliers, corrections log
+* `tables/` – meta-analysis, moderator tests, robustness, cross-validation, importance, interactions, Table 2
+* `figures/` – figures as PDF, TIFF (600 dpi) and PNG
 
 ## Citation
 
-Beillouin D., Verstraete C., Cardinael R., Chabroux U., Laurent J.-B., Waite P.-A., Demenois J. (2025). MACCA: Mapping Agroforestry Carbon Change in the Americas. GitHub repository: https://github.com/dbeillouin/MACCA
+See `CITATION.cff`. Please cite the article and the dataset (https://doi.org/10.18167/DVN1/GISJUZ).

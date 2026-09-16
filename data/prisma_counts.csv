@@ -1,0 +1,16 @@
+key,n,label
+identified,404,"Articles identified in Web of Science, Scopus, CAB Direct, Agricola and the CATIE repository (Biblioteca Orton)"
+duplicates,236,Duplicates removed
+non_duplicated,168,Non-duplicated articles
+not_accessible,5,Full text not accessible
+available,163,Available articles
+out_of_scope,36,Out of scope
+in_scope,127,Articles within the scope
+no_control,49,Without an appropriate control
+other_exclusions,18,Other exclusions (reason to be specified)
+kept,60,Articles kept for the meta-analysis database
+excluded_analysis,5,No effect size computable for the analysis datasets
+excluded_revision,1,Excluded at revision (incubation study)
+included,54,Studies included in the analyses
+included_rr,52,Studies contributing response ratios
+included_sr,42,Studies contributing storage rates

@@ -1,0 +1,4 @@
+id_article,reason,n_observations_removed,dataset
+34,Incubation study (ground tree litter incubated in jars): no field-based tree-less control,15,response_ratio
+34,Incubation study (ground tree litter incubated in jars): no field-based tree-less control,15,storage_rate
+83,"Control defined by distance from trees, not an independent tree-less plot",NA,NA

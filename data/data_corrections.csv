@@ -1,0 +1,31 @@
+id_article,match_country,match_field,match_value,field,new_value,status,reason,source
+33,Costa Rica,X_(WGS84),-83716667,X_(WGS84),-83.716667,applied,decimal separator lost,rescaling
+137,Costa Rica,X_(WGS84),-836333,X_(WGS84),-83.6333,applied,decimal separator lost,rescaling
+139,Costa Rica,X_(WGS84),-836333,X_(WGS84),-83.6333,applied,decimal separator lost,rescaling
+163,Costa Rica,X_(WGS84),-836751,X_(WGS84),-83.6751,applied,decimal separator lost,rescaling
+58,Mexico,X_(WGS84),-92533333,X_(WGS84),-92.533333,applied,decimal separator lost,rescaling
+54,Peru,X_(WGS84),-77668333,X_(WGS84),-77.6683,applied,decimal separator lost,"Vásquez et al. (2020) Sci Agropecu 11:167-176, Materiales y métodos: UTM 204704.6 E / 9313329.1 N (zone 18S) = 6.2056°S, 77.6683°W"
+54,Peru,Y_(WGS84),6.2055,Y_(WGS84),-6.2056,applied,missing minus sign (southern hemisphere),idem
+54,Peru,temperature,*,temperature,14.5,applied,value had been filled with the database mean (26.4 °C) because coordinates were invalid; the article reports no climate data,"Molinopampa (2400 m) site descriptions in other studies of the same district: 14.5 °C, 1200 mm (Rev Mex Cienc Pecu 2022, 13(2):573)"
+54,Peru,precipitation,*,precipitation,1200,applied,value had been filled with the database mean (2122 mm),idem
+153,Costa Rica,X_(WGS84),-85.45,X_(WGS84),-84.70,applied,Costa Rican site (Esparza) carried the Nicaraguan coordinates of the same study,"Ibrahim et al. (2007) Agrofor Am 45:27-36, Materiales y métodos: Esparza 10°09'N, 84°42'W"
+153,Costa Rica,Y_(WGS84),12.8333333333333,Y_(WGS84),10.15,applied,idem,idem
+153,Colombia,X_(WGS84),NA,X_(WGS84),-75.6333,applied,missing coordinates,"Ibrahim et al. (2007): Quindío and Valle del Cauca 4°26'N, 75°38'W"
+153,Colombia,Y_(WGS84),NA,Y_(WGS84),4.4333,applied,missing coordinates,idem
+159,Nicaragua,X_(WGS84),-8545,X_(WGS84),-85.45,applied,decimal separator lost,"Cárdenas et al. (2019) Agrofor Syst 93:229-239: Matiguás 12°50'N, 85°27'W"
+159,Nicaragua,Y_(WGS84),125,Y_(WGS84),12.8333,applied,decimal separator lost (12°50'N = 12.8333; not 12.5),idem
+160,Nicaragua,X_(WGS84),-8545,X_(WGS84),-85.45,applied,decimal separator lost,"Ruiz (2002) CATIE thesis, Matiguás; coordinates of Matiguás from Ibrahim et al. (2007) and Cárdenas et al. (2019)"
+160,Nicaragua,Y_(WGS84),125,Y_(WGS84),12.8333,applied,decimal separator lost (12°50'N),idem
+78,Peru,X_(WGS84),NA,X_(WGS84),-76.7,applied,missing coordinates; approximate centroid of the three study provinces (map only; climate reported in the article),"Solis et al. (2020) J Agric Sci 158:450-460: El Dorado, Lamas and Moyobamba provinces, San Martín (25 °C, 1800 mm)"
+78,Peru,Y_(WGS84),NA,Y_(WGS84),-6.4,applied,idem,idem
+158,Costa Rica,X_(WGS84),NA,X_(WGS84),-83.68,applied,missing coordinates; approximate location of Turrialba (map only; climate reported in the article),"Cerda et al. (2020) Crop Prot 105149: Turrialba, 600-1400 m, 22.2 °C, 2781 mm"
+158,Costa Rica,Y_(WGS84),NA,Y_(WGS84),9.90,applied,idem,idem
+165,Ecuador,precipitation,95,precipitation,,to_verify,"annual precipitation of 95 mm is implausible for the lower Sumaco Biosphere Reserve (Napo, Amazonian Ecuador); check the value in the source (removing this study does not change the precipitation results)","Jadán (2012) CATIE MSc thesis, repository 11554/2395"
+148,Costa Rica,altitude,1050,X_(WGS84),-84.345,applied,"missing coordinates; coffee sites in Grecia and Naranjo, Alajuela (1000–1100 m); midpoint of the two towns (map only; climate in the database matches the article)","Ávila et al. (2001) Agrofor Am 8(30):32–35, Materiales y métodos"
+148,Costa Rica,altitude,1050,Y_(WGS84),10.085,applied,idem,"Ávila et al. (2001) Agrofor Am 8(30):32–35, Materiales y métodos"
+148,Costa Rica,altitude,200,X_(WGS84),-83.735,applied,"missing coordinates; silvopastoral sites in Guácimo and Pococí, Limón (200 m); midpoint of the two towns (map only; climate in the database matches the article)","Ávila et al. (2001) Agrofor Am 8(30):32–35, Materiales y métodos"
+148,Costa Rica,altitude,200,Y_(WGS84),10.21,applied,idem,"Ávila et al. (2001) Agrofor Am 8(30):32–35, Materiales y métodos"
+155,Costa Rica,X_(WGS84),-82.5833333333333,X_(WGS84),-82.8333,applied,"the database used the corner of the study area (9°00'N, 82°35'W), which falls in Panama; replaced by the centre of the area reported in the article (map only)","Andrade et al. (2008) Agrofor Am 46:45–50, Materiales y métodos: Territorios Indígenas de Talamanca, 9°00'–9°50'N, 82°35'–83°05'W"
+155,Costa Rica,Y_(WGS84),9,Y_(WGS84),9.4167,applied,idem,"Andrade et al. (2008) Agrofor Am 46:45–50, Materiales y métodos: Territorios Indígenas de Talamanca, 9°00'–9°50'N, 82°35'–83°05'W"
+161,Costa Rica,X_(WGS84),-82.5833333333333,X_(WGS84),-82.88,applied,same corner coordinates as study 155 (Panama); replaced by the approximate centre of the Talamanca valley named in the thesis title (map only),Cerda Bustillos (2008) CATIE MSc thesis: valle de Talamanca (Bribri–Amubri area)
+161,Costa Rica,Y_(WGS84),9,Y_(WGS84),9.57,applied,idem,Cerda Bustillos (2008) CATIE MSc thesis: valle de Talamanca (Bribri–Amubri area)
