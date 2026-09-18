@@ -10,7 +10,7 @@ no_control,49,Without an appropriate control
 other_exclusions,18,Other exclusions (reason to be specified)
 kept,60,Articles kept for the meta-analysis database
 excluded_analysis,5,No effect size computable for the analysis datasets
-excluded_revision,1,Excluded at revision (incubation study)
+excluded_revision,1,Incubation study without field control
 included,54,Studies included in the analyses
 included_rr,52,Studies contributing response ratios
 included_sr,42,Studies contributing storage rates

@@ -2,7 +2,7 @@
 
 Code accompanying:
 
-> Beillouin D, Verstraete C, Cardinael R, Chabroux U, Laurent J-B, Waite P-A, Demenois J. *Baseline soil carbon and temporal drivers, not management, govern soil carbon sequestration in tropical agroforestry. A meta-analysis.* Agronomy for Sustainable Development (under review).
+> Beillouin D, Verstraete C, Cardinael R, Chabroux U, Laurent J-B, Waite P-A, Demenois J. *Baseline soil carbon, time since conversion and climate, not system characteristics, govern soil carbon sequestration in Neotropical agroforestry. A meta-analysis.* Agronomy for Sustainable Development (under review).
 
 The workflow reproduces every number, table and figure of the article and of its Electronic Supplementary Material from a frozen version of the MACCA database.
 
@@ -30,7 +30,7 @@ R/02_prepare_datasets.R corrections, study-level exclusions, SD imputation, effe
 R/03_meta_analysis.R    three-level meta-analyses, heterogeneity, small-study effects, location-scale models
 R/04_ml_models.R        MetaForest outlier screening, XGBoost, cross-validation (random, profile, study), importance, SHAP interactions
 R/05_partial_dependence.R  partial dependence by depth class, restricted to observed ranges, study bootstrap
-R/06_categorical_effects.R standardized XGBoost predictions by category (Table S9)
+R/06_categorical_effects.R standardized XGBoost predictions by category (Table S7)
 R/07_data_support.R     data coverage by depth and time since conversion
 R/08_moderator_tests.R  meta-regressions on observed effect sizes, heterogeneity explained
 R/09_robustness.R       leave-one-study-out, thresholds, confounding, sensitivity analyses

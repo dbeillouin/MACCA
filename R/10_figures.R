@@ -40,7 +40,7 @@ theme_asd <- theme_classic(base_size = 8, base_family = "sans") +
 tag <- function(letter) annotate("text", x = -Inf, y = Inf, label = paste0("(", letter, ")"),
                                  hjust = -0.35, vjust = 1.3, size = 3, fontface = "bold")
 # panel letter for faceted plots: drawn in the first facet only
-tag_facet <- function(letter) geom_text(data = data.frame(grp = factor("Biophysical", levels = c("Biophysical", "Management")),
+tag_facet <- function(letter) geom_text(data = data.frame(grp = factor("Biophysical", levels = c("Biophysical", "System")),
                                                           lab = paste0("(", letter, ")")),
                                         aes(x = -Inf, y = Inf, label = lab), inherit.aes = FALSE,
                                         hjust = -0.35, vjust = 1.3, size = 3, fontface = "bold")
@@ -143,9 +143,9 @@ if (requireNamespace("maps", quietly = TRUE)) {
 imp <- bind_rows(read_csv(dir_out("tables", "importance_RR.csv"), show_col_types = FALSE) %>% mutate(metric = "Response ratio"),
                  read_csv(dir_out("tables", "importance_storage_rate.csv"), show_col_types = FALSE) %>% mutate(metric = "Storage rate"))
 ord <- imp %>% group_by(variable) %>% summarise(m = mean(share_mean), .groups = "drop") %>%
-  mutate(grp = ifelse(variable %in% BIOPHYS, "Biophysical", "Management")) %>% arrange(grp, desc(m))
+  mutate(grp = ifelse(variable %in% BIOPHYS, "Biophysical", "System")) %>% arrange(grp, desc(m))
 fac <- function(d) d %>% mutate(var = factor(LAB[variable], levels = rev(LAB[ord$variable])),
-                                grp = factor(ifelse(variable %in% BIOPHYS, "Biophysical", "Management"), levels = c("Biophysical", "Management")),
+                                grp = factor(ifelse(variable %in% BIOPHYS, "Biophysical", "System"), levels = c("Biophysical", "System")),
                                 metric = factor(metric, levels = names(COL_METRIC)))
 imp <- fac(imp)
 pd <- position_dodge(width = -0.55)
@@ -249,16 +249,20 @@ p4c <- ggplot() +
 
 mt <- read_csv(dir_out("tables", "moderator_tests_observed_data.csv"), show_col_types = FALSE) %>%
   filter(moderator %in% c("all_biophysical", "all_management")) %>%
-  mutate(group = ifelse(moderator == "all_biophysical", "Biophysical", "Management"),
+  mutate(group = ifelse(moderator == "all_biophysical", "Biophysical", "System"),
          metric = ifelse(metric == "RR", "Response ratio", "Storage rate"),
          lab = paste0(sprintf("%.1f%%", heterogeneity_explained_total_pct), "\n",
                       ifelse(p < 0.001, "p < 0.001", ifelse(p < 0.01, sprintf("p = %.3f", p), sprintf("p = %.2f", p)))))
-p4d <- ggplot(mt, aes(metric, heterogeneity_explained_total_pct, fill = group)) +
-  geom_col(position = position_dodge(0.7), width = 0.6) +
-  geom_text(aes(label = lab, y = heterogeneity_explained_total_pct + 1.2), position = position_dodge(0.7), size = 2.3, vjust = 0) +
-  scale_fill_manual(values = c(Biophysical = OI[["green"]], Management = OI[["grey"]]), name = NULL) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
-  labs(x = NULL, title = "Heterogeneity explained (%)") + tag("d") + theme_asd + theme(legend.position = c(0.28, 0.82))
+pdd <- position_dodge(width = 0.5)
+p4d <- ggplot(mt, aes(metric, heterogeneity_explained_total_pct, colour = group)) +
+  geom_hline(yintercept = 0, linewidth = 0.4, colour = "black") +
+  geom_linerange(aes(ymin = 0, ymax = heterogeneity_explained_total_pct), position = pdd, linewidth = 1.1) +
+  geom_point(position = pdd, size = 2.6) +
+  geom_text(aes(label = lab, y = heterogeneity_explained_total_pct + 1.6), position = pdd, size = 2.3, vjust = 0, show.legend = FALSE) +
+  scale_colour_manual(values = c(Biophysical = OI[["green"]], System = OI[["grey"]]), name = NULL) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0.02, 0.18))) +
+  labs(x = NULL, title = "Heterogeneity explained (%)") + tag("d") + theme_asd +
+  theme(legend.position = c(0.28, 0.85))
 save_fig((p4a | p4b) / (p4c | p4d), "Fig4_drivers_observed", 174, 150)
 
 # =============================================================================
