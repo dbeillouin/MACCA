@@ -224,19 +224,42 @@ fb <- map_dfr(c(22, 28), function(T) {
   p <- predict(m_b, newmods = cbind((g - 50) / 10, T - 25, (g - 50) / 10 * (T - 25)))
   tibble(x = g, fit = pct(p$pred), lb = pct(p$ci.lb), ub = pct(p$ci.ub), temp = paste0(T, " \u00b0C"))
 })
+for (Tq in c(22, 28)) {
+  sub <- if (Tq < 25) dr$control_soc_mean_T_ha[dr$temperature <= 24] else dr$control_soc_mean_T_ha[dr$temperature >= 26]
+  qq <- quantile(sub, c(0.10, 0.90))
+  record(sprintf("fig4b_plotted_range_%dC_MgC_ha", Tq), sprintf("%.0f-%.0f", qq[1], min(qq[2], 100)), "Fig. 4b")
+  for (Sq in c(30, 80)) {
+    pq <- predict(m_b, newmods = cbind((Sq - 50) / 10, Tq - 25, (Sq - 50) / 10 * (Tq - 25)))
+    record(sprintf("fig4b_RR_pred_%dC_%dMgC", Tq, Sq),
+           sprintf("%.1f [%.1f; %.1f]", pct(pq$pred), pct(pq$ci.lb), pct(pq$ci.ub)), "3.x, Fig. 4b")
+  }
+}
 COL_T <- setNames(c(OI[["blue"]], OI[["vermillion"]]), c("22 \u00b0C", "28 \u00b0C"))
 p4b <- ggplot(fb, aes(x, fit, linetype = temp, colour = temp, fill = temp)) +
   geom_hline(yintercept = 0, linetype = 3, linewidth = 0.3) +
   geom_ribbon(aes(ymin = lb, ymax = ub), alpha = 0.18, colour = NA) + geom_line(linewidth = 0.9) +
-  scale_colour_manual(values = COL_T, name = NULL) + scale_fill_manual(values = COL_T, name = NULL) +
-  scale_linetype_manual(values = c(2, 1), name = NULL) +
+  geom_text(data = dplyr::slice_min(dplyr::group_by(fb, temp), x, n = 1, with_ties = FALSE),
+            aes(x = x, y = fit, label = temp, colour = temp), inherit.aes = FALSE,
+            hjust = -0.05, vjust = -0.9, size = 2.4, show.legend = FALSE) +
+  scale_colour_manual(values = COL_T, guide = "none") + scale_fill_manual(values = COL_T, guide = "none") +
+  scale_linetype_manual(values = c(2, 1), guide = "none") +
+  scale_x_continuous(expand = expansion(mult = c(0.05, 0.05))) +
   labs(x = UNIT_SOC, title = "Predicted response ratio (%)") + tag("b") + theme_asd +
-  theme(legend.position = c(0.8, 0.86), legend.key.width = unit(7, "mm"))
+  theme(legend.position = "none")
 
 m_c <- rma.mv(.y, .v, mods = ~ ns(time_since_conversion, 3), random = rnd, data = ds, method = "REML")
 gc <- seq(min(ds$time_since_conversion), max(ds$time_since_conversion), length.out = 120)
+for (Tq in c(2, 5, 10, 20)) {
+  pq <- predict(m_c, newmods = unname(as.matrix(predict(ns(ds$time_since_conversion, 3), Tq))))
+  record(sprintf("fig4c_storage_rate_pred_%dy", Tq),
+         sprintf("%.2f [%.2f; %.2f]", pq$pred, pq$ci.lb, pq$ci.ub), "3.x, Fig. 4c")
+}
+
 pc <- predict(m_c, newmods = unname(as.matrix(predict(ns(ds$time_since_conversion, 3), gc))))
 fc <- tibble(x = gc, fit = pc$pred, lb = pc$ci.lb, ub = pc$ci.ub)
+# panel edge in data units, so that (c) sits like the letters of the other panels
+xr_c <- range(ds$time_since_conversion)
+x_tag_c <- (sqrt(xr_c[1]) - 0.05 * diff(sqrt(xr_c)))^2
 p4c <- ggplot() +
   geom_hline(yintercept = 0, linetype = 3, linewidth = 0.3) +
   geom_point(data = ds, aes(time_since_conversion, .y, size = w), shape = 16, colour = PT, alpha = 0.35) +
@@ -245,7 +268,9 @@ p4c <- ggplot() +
   geom_rug(data = ds, aes(time_since_conversion), sides = "b", length = unit(1.2, "mm"), linewidth = 0.2, alpha = 0.5) +
   scale_x_sqrt(breaks = c(1, 5, 10, 20, 40, 70)) + scale_size(range = c(0.3, 2.5), guide = "none") +
   coord_cartesian(ylim = ylim_q(ds$.y)) +
-  labs(x = "Time since conversion (years, square-root scale)", title = UNIT_RATE) + tag("c") + theme_asd
+  labs(x = "Time since conversion (years, square-root scale)", title = UNIT_RATE) +
+  annotate("text", x = x_tag_c, y = Inf, label = "(c)",
+           hjust = -0.35, vjust = 1.3, size = 3, fontface = "bold") + theme_asd
 
 mt <- read_csv(dir_out("tables", "moderator_tests_observed_data.csv"), show_col_types = FALSE) %>%
   filter(moderator %in% c("all_biophysical", "all_management")) %>%
@@ -263,7 +288,10 @@ p4d <- ggplot(mt, aes(metric, heterogeneity_explained_total_pct, colour = group)
   scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0.02, 0.18))) +
   labs(x = NULL, title = "Heterogeneity explained (%)") + tag("d") + theme_asd +
   theme(legend.position = c(0.28, 0.85))
-save_fig((p4a | p4b) / (p4c | p4d), "Fig4_drivers_observed", 174, 150)
+# ASD: a composite figure must not mix figure types, so the bar panel (former d)
+# is not part of Fig. 4; its four values are given in the text.
+fig4 <- (p4a | p4b) / (plot_spacer() + p4c + plot_spacer() + plot_layout(widths = c(0.25, 0.5, 0.25)))
+save_fig(fig4, "Fig4_drivers_observed", 174, 150)
 
 # =============================================================================
 # Supplementary figures

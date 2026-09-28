@@ -119,6 +119,14 @@ es <- escalc(measure = "ROM",
 rr$yi <- as.numeric(es$yi); rr$vi <- as.numeric(es$vi)
 rr <- rr %>% filter(!is.na(yi), !is.na(vi))
 
+
+# Published specification: imputed SDs are used as estimated (no inflation) and the
+# sampling variance of a rate divides each group variance by its number of replicates.
+# The two environment variables below only serve the sensitivity analysis (Table S8).
+SD_INFLATE <- as.numeric(Sys.getenv("MACCA_SD_INFLATE", "1"))
+VAR_WITH_N <- toupper(Sys.getenv("MACCA_VAR_WITH_N", "TRUE")) %in% c("TRUE", "1", "YES")
+message(sprintf("[MACCA] taux de stockage : SD_INFLATE = %s | VAR_WITH_N = %s", SD_INFLATE, VAR_WITH_N))
+
 # ===========================================================================
 # B. Storage rates
 # ===========================================================================
@@ -141,12 +149,20 @@ sq <- sq %>%
   recode_common() %>%
   # NOTE: the former storage-rate script inflated imputed CVs by 1.5. Kept for
   # comparability; describe it in Methods or set inflate = 1 for both metrics.
-  impute_sd("treatment_soc_mean_T_ha", "treatment_soc_sd_T_ha", inflate = 1.5) %>%
-  impute_sd("control_soc_mean_T_ha",   "control_soc_sd_T_ha",   inflate = 1.5) %>%
+  impute_sd("treatment_soc_mean_T_ha", "treatment_soc_sd_T_ha", inflate = SD_INFLATE) %>%
+  impute_sd("control_soc_mean_T_ha",   "control_soc_sd_T_ha",   inflate = SD_INFLATE) %>%
   mutate(seq_rate    = if_else(is.na(delta_stock_T),
                                (treatment_soc_mean_T_ha - control_soc_mean_T_ha) / time_since_conversion,
                                delta_stock_T),
-         seq_rate_sd = sqrt(treatment_soc_sd_T_ha^2 + control_soc_sd_T_ha^2) / time_since_conversion,
+         n_t_eff = suppressWarnings(as.numeric(treatment_replicate_nb)),
+         n_c_eff = suppressWarnings(as.numeric(control_replicate_nb)),
+         n_t_eff = if_else(is.na(n_t_eff) | n_t_eff < 1, 1, n_t_eff),
+         n_c_eff = if_else(is.na(n_c_eff) | n_c_eff < 1, 1, n_c_eff),
+         seq_rate_sd = if (VAR_WITH_N)
+             sqrt(treatment_soc_sd_T_ha^2 / n_t_eff +
+                  control_soc_sd_T_ha^2   / n_c_eff) / time_since_conversion
+           else
+             sqrt(treatment_soc_sd_T_ha^2 + control_soc_sd_T_ha^2) / time_since_conversion,
          seq_rate_vi = seq_rate_sd^2) %>%
   filter(!is.na(seq_rate), !is.na(seq_rate_vi), is.finite(seq_rate))
 
@@ -156,6 +172,13 @@ fill_id <- function(df, prefix) df %>%
   mutate(ID = as.character(ID),
          ID = if_else(is.na(ID) | ID == "" | duplicated(ID), paste0(prefix, "_row", row_number()), ID))
 rr <- fill_id(rr, "RR"); sq <- fill_id(sq, "SR")
+
+n_miss_rep <- sum(is.na(suppressWarnings(as.numeric(sq$treatment_replicate_nb))) |
+                  is.na(suppressWarnings(as.numeric(sq$control_replicate_nb))))
+record("storage_rate_variance_settings",
+       paste0("SD_INFLATE=", SD_INFLATE, "; divided by replicates=", VAR_WITH_N,
+              "; obs without replicate number=", n_miss_rep), "2.2, sensitivity")
+
 record("n_obs_without_original_ID", paste0("RR ", sum(grepl("^RR_row", rr$ID)), "; storage rate ", sum(grepl("^SR_row", sq$ID))),
        "data note", "IDs generated; fill them in the database")
 

@@ -185,6 +185,19 @@ for (nm in c("RR", "storage_rate")) {
                                           round(min(deep$time_since_conversion), 1), round(max(deep$time_since_conversion), 1)), "3.x (exploratory)")
   L <- loso(d, ~ precipitation + MEAN_depth, ~ precipitation * MEAN_depth, "precipitation:MEAN_depth")
   record(S("E_depthxprecip_LOSO"), loso_summary(L, if (!is.null(dp$m1)) dp$m1$b["precipitation:MEAN_depth", 1] else NA, dp$p), "response letter")
+  mE <- tryCatch(rma.mv(.y, .v, mods = ~ precipitation * MEAN_depth, random = rnd, data = d, method = "REML"),
+                 error = function(e) NULL)
+  if (!is.null(mE)) for (D in c(10, 50)) for (P in c(1200, 2800)) {
+    pr <- predict(mE, newmods = cbind(P, D, P * D))
+    record(S(sprintf("E_pred_%dcm_%dmm", D, P)),
+           sprintf("%.1f [%.1f; %.1f]", back(pr$pred), back(pr$ci.lb), back(pr$ci.ub)),
+           "3.x depth x precipitation")
+  }
+  f_bio <- ~ ns(control_soc_mean_T_ha, 3) + ns(time_since_conversion, 3) + ns(temperature, 3) + MEAN_depth
+  pp <- lrt(d, f_bio, update(f_bio, ~ . + ns(precipitation, 3)))
+  record(S("E_precipitation_given_other_biophysical"),
+         sprintf("LRT=%.2f, p=%.3g", pp$LRT, pp$p), "3.x")
+
   rob[[paste(nm, "E")]] <- L %>% mutate(metric = nm, test = "depth x precipitation")
 
   # ---------------------------------------------------------------- F. grey literature
