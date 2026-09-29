@@ -78,7 +78,9 @@ steps <- file.path(SCRIPT_DIR, c(
   "08_moderator_tests.R",       # moderator tests on observed effect sizes
   "09_robustness.R",            # leave-one-study-out, thresholds, confounding
   "10_figures.R",               # main and supplementary figures (ASD rules)
-  "11_prisma.R"                 # PRISMA flow diagram (Fig. S1) from data/prisma_counts.csv
+  "11_prisma.R",                # PRISMA flow diagram (Fig. S1) from data/prisma_counts.csv
+  "12_absolute_scale.R",        # absolute difference, Blomqvist correction (Slessarev et al. 2023)
+  "13_funnel.R"                 # funnel plots (Fig. S4) from the corrected sampling variances
 ))
 if (ONLY09) steps <- steps[substr(basename(steps), 1, 2) %in% ONLY]
 # a full run starts a fresh numbers table; "only09" updates the existing one
