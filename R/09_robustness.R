@@ -77,6 +77,22 @@ for (nm in c("RR", "storage_rate")) {
   record(S("A_initialSOC_LOSO"), loso_summary(L, b10, lin$p), "3.x, response letter")
   rob[[paste(nm, "A")]] <- L %>% mutate(metric = nm, test = "initial SOC linear")
 
+  time_grid <- c(5, 10, 20, 30)
+  time_grid <- time_grid[time_grid <= max(d$time_since_conversion, na.rm = TRUE)]
+  m_time <- rma.mv(.y, .v, mods = ~ ns(time_since_conversion, 3),
+                   random = rnd, data = d, method = "REML")
+  record(S("A2_time_predictions"),
+         fmt_pred(pred_ns(m_time, d$time_since_conversion, time_grid, back), " y"),
+         "3.4, 4.2, 4.5",
+         "non-monotonic: read with A2_time_data_density before quoting a single age")
+  tb_time <- map_dfr(time_grid, function(k)
+    tibble(k = k,
+           n_obs     = sum(d$time_since_conversion >= k, na.rm = TRUE),
+           n_studies = n_distinct(d$id_article[d$time_since_conversion >= k])))
+  record(S("A2_time_data_density"),
+         paste0(">= ", tb_time$k, " y: ", tb_time$n_obs, " obs/", tb_time$n_studies,
+                " studies", collapse = " | "), "3.4, 4.5, caption")
+
   # ---------------------------------------------------------------- B. temperature
   tb <- d %>% mutate(bin = cut(temperature, c(-Inf, 20, 22, 24, 26, 28, Inf))) %>%
     group_by(bin) %>% summarise(n_obs = n(), n_studies = n_distinct(id_article), .groups = "drop")

@@ -184,8 +184,8 @@ heat <- function(file, letter, ttl, show_y = TRUE) {
     scale_y_discrete(expand = expansion(add = c(0.5, 1.4))) +
     labs(x = "Partner moderator", title = ttl) + tag(letter) + theme_asd +
     theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.line = element_blank(), axis.ticks = element_blank(),
-          legend.position = "bottom", legend.key.width = unit(12, "mm"), legend.key.height = unit(2.6, "mm"),
-          legend.title = element_text(size = 7, vjust = 0.9),
+          legend.position = "bottom", legend.key.width = unit(38, "mm"), legend.key.height = unit(4, "mm"),
+          legend.title = element_text(size = 8, vjust = 0.9), legend.text = element_text(size = 8),
           axis.text.y = if (show_y) element_text(colour = "black", size = 7) else element_blank())
 }
 fig3 <- (p3a | p3b) / ((heat("interaction_pairs_rowpct_RR.csv", "c", "Response ratio") |
